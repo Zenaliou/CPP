@@ -3,10 +3,10 @@ CFLAGS = -Wall -Werror -Wextra -std=c++98
 
 SRCS = 	phonebook.cpp \
 		contact.cpp	\
-		main.cpp \
+		main.cpp
 OBJ_DIR = obj
-OBJS = $(OBJ_DIR)/megaphone.o
-NAME = megaphone
+OBJS = $(SRCS:%.cpp=$(OBJ_DIR)/%.o)
+NAME = phonebook
 
 GREEN   = \033[1;32m
 RED     = \033[1;31m
