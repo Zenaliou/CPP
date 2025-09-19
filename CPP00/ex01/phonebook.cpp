@@ -19,6 +19,15 @@ void	Phonebook::addContact()
 		std::cout << "Le prénom ne peut pas être vide!" << std::endl;
 		return;
 	}
+	// Vérifier que le prénom ne contient que des lettres, espaces et tirets
+	for (size_t i = 0; i < input.length(); i++)
+	{
+		if (!std::isalpha(input[i]) && input[i] != ' ' && input[i] != '-')
+		{
+			std::cout << "Le prénom ne peut contenir que des lettres, des espaces et des tirets!" << std::endl;
+			return;
+		}
+	}
 	contacts[currentIndex].setName(input);
 
 	std::cout << "Entrez le nom de famille: ";
@@ -27,6 +36,15 @@ void	Phonebook::addContact()
 	{
 		std::cout << "Le nom de famille ne peut pas être vide!" << std::endl;
 		return;
+	}
+	// Vérifier que le nom de famille ne contient que des lettres, espaces et tirets
+	for (size_t i = 0; i < input.length(); i++)
+	{
+		if (!std::isalpha(input[i]) && input[i] != ' ' && input[i] != '-')
+		{
+			std::cout << "Le nom de famille ne peut contenir que des lettres, des espaces et des tirets!" << std::endl;
+			return;
+		}
 	}
 	contacts[currentIndex].setLast(input);
 
@@ -46,6 +64,15 @@ void	Phonebook::addContact()
 		std::cout << "Le numéro de téléphone ne peut pas être vide!" << std::endl;
 		return;
 	}
+	// Vérifier que le numéro ne contient que des chiffres
+	for (size_t i = 0; i < input.length(); i++)
+	{
+		if (!std::isdigit(input[i]))
+		{
+			std::cout << "Le numéro de téléphone ne peut contenir que des chiffres!" << std::endl;
+			return;
+		}
+	}
 	contacts[currentIndex].setPhone(input);
 
 	std::cout << "Entrez le secret: ";
@@ -58,7 +85,6 @@ void	Phonebook::addContact()
 	contacts[currentIndex].setSecret(input);
 
 	std::cout << "Contact ajouté avec succès!" << std::endl;
-	
 	currentIndex = (currentIndex + 1) % max;
 	if (totalContacts < max)
 		totalContacts++;
@@ -66,7 +92,24 @@ void	Phonebook::addContact()
 
 void	Phonebook::searchContact()
 {
+	std::string input;
+	int index;
 
+	if (totalContacts == 0)
+	{
+		std::cout << "Aucun contact dans le répertoire!" << std::endl;
+		return;
+	}
+	displayContacts();
+	std::cout << "Entrez l'index du contact à afficher: ";
+	std::getline(std::cin, input);
+	if (input.length() == 1 && std::isdigit(input[0]))
+	{
+		index = input[0] - '0';
+		displayContactDetails(index);
+	}
+	else
+		std::cout << "Index invalide! Veuillez entrer un chiffre." << std::endl;
 }
 
 void	Phonebook::displayContacts()
@@ -78,29 +121,24 @@ void	Phonebook::displayContacts()
 		std::cout << "Aucun contact dans le répertoire!" << std::endl;
 		return;
 	}
-
 	std::cout << std::setw(10) << "Index" << "|";
 	std::cout << std::setw(10) << "Prénom" << "|";
 	std::cout << std::setw(10) << "Nom" << "|";
 	std::cout << std::setw(10) << "Surnom" << std::endl;
 	std::cout << "----------------------------------------" << std::endl;
-
 	for (int i = 0; i < totalContacts; i++)
 	{
 		std::cout << std::setw(10) << i << "|";
-		
 		// Prénom
 		field = contacts[i].getName();
 		if (field.length() > 10)
 			field = field.substr(0, 9) + ".";
 		std::cout << std::setw(10) << field << "|";
-		
 		// Nom
 		field = contacts[i].getLast();
 		if (field.length() > 10)
 			field = field.substr(0, 9) + ".";
 		std::cout << std::setw(10) << field << "|";
-		
 		// Surnom
 		field = contacts[i].getNick();
 		if (field.length() > 10)
@@ -116,7 +154,6 @@ void	Phonebook::displayContactDetails(int index)
 		std::cout << "Index invalide!" << std::endl;
 		return;
 	}
-
 	std::cout << "===== DÉTAILS DU CONTACT =====" << std::endl;
 	std::cout << "Prénom: " << contacts[index].getName() << std::endl;
 	std::cout << "Nom: " << contacts[index].getLast() << std::endl;
