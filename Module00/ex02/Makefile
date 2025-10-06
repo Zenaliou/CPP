@@ -1,10 +1,11 @@
 CC = c++
-CFLAGS = -Wall -Werror -Wextra -std=c++98
+CFLAGS = -Wall -Werror -Wextra -std=c++98 -MMD -MP
 
 SRCS = 	tests.cpp \
 		Account.cpp
 OBJ_DIR = obj
 OBJS = $(SRCS:%.cpp=$(OBJ_DIR)/%.o)
+DEP = $(OBJS:.o=.d)
 NAME = account_test
 
 GREEN   = \033[1;32m
@@ -28,6 +29,8 @@ $(OBJ_DIR):
 
 $(OBJ_DIR)/%.o: %.cpp | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
+
+-include $(DEP)
 
 clean:
 	@rm -rf $(OBJ_DIR)
