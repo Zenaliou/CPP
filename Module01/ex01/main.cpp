@@ -3,7 +3,7 @@
 int main() 
 {
     int N = 5;
-    std::string name = "Walker";
+    std::string name = "Niclee";
     
     std::cout << "Creating a horde of " << N << " zombies named " << name << std::endl;
     
