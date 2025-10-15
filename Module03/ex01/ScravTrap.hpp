@@ -17,6 +17,6 @@ class ScravTrap : public ClapTrap
 		ScravTrap &operator=(const ScravTrap& other);
 
 		void guardGate();
-}
+};
 
 #endif
