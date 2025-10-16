@@ -71,7 +71,6 @@ void ClapTrap::beRepaired(unsigned int amount)
         if (_hit_points > 100)
             _hit_points = 100;
         _energy_points--;
-        std::cout << "ClapTrap " << _name << " is repaired for " << amount 
-                  << " points, new HP: " << _hit_points << "." << std::endl;
+        std::cout << "ClapTrap " << _name << " is repaired for " << amount << " points, new HP: " << _hit_points << "." << std::endl;
     }
 }
