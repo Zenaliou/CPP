@@ -1,0 +1,23 @@
+#ifndef SCRAVTRAP_HPP
+#define SCRAVTRAP_HPP
+
+#include "ClapTrap.hpp"
+
+class ScravTrap : virtual public ClapTrap
+{
+	private:
+		bool	_guarding_gate;
+
+	public:
+		ScravTrap();
+		ScravTrap(std::string name);
+		ScravTrap(const ScravTrap& other);
+		~ScravTrap();
+
+		ScravTrap &operator=(const ScravTrap& other);
+
+		void attack(const std::string& target);
+		void guardGate();
+};
+
+#endif

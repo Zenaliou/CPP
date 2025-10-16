@@ -2,11 +2,14 @@ CC = c++
 CFLAGS = -Wall -Werror -Wextra -std=c++98 -MMD -MP
 
 SRCS = 	main.cpp \
-        ClapTrap.cpp
+        ClapTrap.cpp \
+		FragTrap.cpp \
+		ScravTrap.cpp \
+		DiamondTrap.cpp
 OBJ_DIR = obj
 OBJS = $(SRCS:%.cpp=$(OBJ_DIR)/%.o)
 DEP = $(OBJS:.o=.d)
-NAME = ClapTrap
+NAME = DiamondTrap
 
 GREEN   = \033[1;32m
 RED     = \033[1;31m
