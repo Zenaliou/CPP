@@ -16,6 +16,7 @@ class ScravTrap : public ClapTrap
 
 		ScravTrap &operator=(const ScravTrap& other);
 
+		void attack(const std::string& target);
 		void guardGate();
 };
 
