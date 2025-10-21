@@ -30,6 +30,7 @@ void Harl::error(void)
 
 void Harl::complain(std::string level)
 {
+    // Array of function pointers to the different complaint methods
     void (Harl::*functions[])(void) = {
         &Harl::debug,
         &Harl::info,
@@ -37,6 +38,7 @@ void Harl::complain(std::string level)
         &Harl::error
     };
     
+    // Array of corresponding level strings (must match function order)
     std::string levels[] = {
         "DEBUG",
         "INFO", 
@@ -48,6 +50,7 @@ void Harl::complain(std::string level)
     {
         if (levels[i] == level)
         {
+            // Call the corresponding function using pointer-to-member syntax
             (this->*functions[i])();
             return;
         }

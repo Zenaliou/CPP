@@ -23,6 +23,8 @@ int main(int argc, char **argv)
     Harl harl;
     int level = getLevel(argv[1]);
     
+    // Filter messages by level: displays the chosen level and all levels above it
+    // Uses fall-through to create hierarchy DEBUG < INFO < WARNING < ERROR
     switch (level)
     {
         case 0: // DEBUG
