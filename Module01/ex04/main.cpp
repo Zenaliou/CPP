@@ -4,15 +4,16 @@
 
 int main(int argc, char **argv)
 {
+    // Check if the correct number of arguments is provided
     if (argc != 4)
     {
         std::cerr << "Usage: ./replace <filename> <s1> <s2>" << std::endl;
         return (1);
     }
 
-    std::string filename = argv[1];
-    std::string s1 = argv[2];
-    std::string s2 = argv[3];
+    std::string filename = argv[1];  // Input file name
+    std::string s1 = argv[2];        // String to find
+    std::string s2 = argv[3];        // String to replace with
 
     if (s1.empty())
     {
@@ -20,6 +21,7 @@ int main(int argc, char **argv)
         return (1);
     }
 
+    // Open the input file for reading
     std::ifstream infile(filename.c_str());
     if (!infile.is_open())
     {
@@ -27,7 +29,10 @@ int main(int argc, char **argv)
         return (1);
     }
 
+    // Create output file name by appending ".replace" to original filename
     std::string outfilename = filename + ".replace";
+    
+    // Open the output file for writing
     std::ofstream outfile(outfilename.c_str());
     if (!outfile.is_open())
     {
@@ -37,19 +42,21 @@ int main(int argc, char **argv)
     }
 
     std::string line;
-    bool first_line = true;
-    
+    bool first_line = true;  // Flag to handle newlines properly
     while (std::getline(infile, line))
     {
+        // Add newline before each line except the first one
         if (!first_line)
             outfile << std::endl;
         first_line = false;
-        size_t pos = 0;
+        size_t pos = 0;  // Position to start searching from
+        // Find and replace all occurrences of s1 with s2 in the current line
         while ((pos = line.find(s1, pos)) != std::string::npos)
         {
-            line.replace(pos, s1.length(), s2);
-            pos += s2.length();
+            line.replace(pos, s1.length(), s2);  // Replace s1 with s2
+            pos += s2.length();  // Move position past the replacement to avoid infinite loop
         }
+        // Write the modified line to output file
         outfile << line;
     }
     infile.close();
