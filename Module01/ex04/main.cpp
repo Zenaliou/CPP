@@ -4,16 +4,15 @@
 
 int main(int argc, char **argv)
 {
-    // Check if the correct number of arguments is provided
     if (argc != 4)
     {
         std::cerr << "Usage: ./replace <filename> <s1> <s2>" << std::endl;
         return (1);
     }
 
-    std::string filename = argv[1];  // Input file name
-    std::string s1 = argv[2];        // String to find
-    std::string s2 = argv[3];        // String to replace with
+    std::string filename = argv[1];
+    std::string s1 = argv[2];
+    std::string s2 = argv[3];
 
     if (s1.empty())
     {
@@ -49,16 +48,28 @@ int main(int argc, char **argv)
         if (!first_line)
             outfile << std::endl;
         first_line = false;
+        
+        std::string result;
         size_t pos = 0;  // Position to start searching from
+        size_t found;
+        
         // Find and replace all occurrences of s1 with s2 in the current line
-        while ((pos = line.find(s1, pos)) != std::string::npos)
+        while ((found = line.find(s1, pos)) != std::string::npos)
         {
-            line.replace(pos, s1.length(), s2);  // Replace s1 with s2
-            pos += s2.length();  // Move position past the replacement to avoid infinite loop
+            // Add the part before the found string
+            result += line.substr(pos, found - pos);
+            // Add the replacement string
+            result += s2;
+            // Move position past the found string
+            pos = found + s1.length();
         }
+        // Add the remaining part of the line
+        result += line.substr(pos);
+        
         // Write the modified line to output file
-        outfile << line;
+        outfile << result;
     }
+    
     infile.close();
     outfile.close();
     std::cout << "File processed successfully. Output written to: " << outfilename << std::endl;
