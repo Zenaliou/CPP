@@ -1,48 +1,83 @@
 #include "Bureaucrat.hpp"
-#include "Form.hpp"
+#include "AForm.hpp"
+#include "ShrubberyCreationForm.hpp"
+#include "RobotomyRequestForm.hpp"
+#include "PresidentialPardonForm.hpp"
 
 int main(void)
 {
-	std::cout << "=== Test Bureaucrat ==="<< std::endl;
-	Bureaucrat *bob = new Bureaucrat("Bob", 50);
-	Bureaucrat *alice = new Bureaucrat("Alice", 1);
-	
-	std::cout << "\n=== Test Form Creation ==="<< std::endl;
-	try
-	{
-		Form formA("FormA", 45, 30);
-		std::cout << formA << std::endl;
-		
-		Form formB("FormB", 5, 3);
-		std::cout << formB << std::endl;
-		
-		std::cout << "\n=== Test Signing Forms ==="<< std::endl;
-		bob->signForm(formA);  // Should succeed
-		bob->signForm(formB);  // Should fail (grade too low)
-		alice->signForm(formB); // Should succeed
-		alice->signForm(formA); // Already signed
-		
-		std::cout << "\n=== Final Form States ==="<< std::endl;
-		std::cout << formA << std::endl;
-		std::cout << formB << std::endl;
-	}
-	catch(const std::exception& e)
-	{
-		std::cerr << "Exception: " << e.what() << std::endl;
-	}
-	
-	std::cout << "\n=== Test Invalid Form ==="<< std::endl;
-	try
-	{
-		Form invalidForm("Invalid", 0, 50); // Should throw exception
-	}
-	catch(const std::exception& e)
-	{
-		std::cerr << "Exception caught: " << e.what() << std::endl;
-	}
-	
-	delete bob;
-	delete alice;
-	
-	return 0;
+    std::cout << "=== Test ShrubberyCreationForm ===" << std::endl;
+    try
+    {
+        Bureaucrat bob("Bob", 140);
+        ShrubberyCreationForm shrub("garden");
+        
+        std::cout << shrub << std::endl;
+        bob.signForm(shrub);
+        bob.executeForm(shrub);
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << "Exception: " << e.what() << std::endl;
+    }
+
+    std::cout << "\n=== Test RobotomyRequestForm ===" << std::endl;
+    try
+    {
+        Bureaucrat alice("Alice", 40);
+        RobotomyRequestForm robot("Bender");
+        
+        std::cout << robot << std::endl;
+        alice.signForm(robot);
+        alice.executeForm(robot);
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << "Exception: " << e.what() << std::endl;
+    }
+
+    std::cout << "\n=== Test PresidentialPardonForm ===" << std::endl;
+    try
+    {
+        Bureaucrat president("President", 1);
+        PresidentialPardonForm pardon("Arthur Dent");
+        
+        std::cout << pardon << std::endl;
+        president.signForm(pardon);
+        president.executeForm(pardon);
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << "Exception: " << e.what() << std::endl;
+    }
+
+    std::cout << "\n=== Test Execution Without Signing ===" << std::endl;
+    try
+    {
+        Bureaucrat charlie("Charlie", 1);
+        PresidentialPardonForm pardon2("Ford Prefect");
+        
+        charlie.executeForm(pardon2);
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << "Exception: " << e.what() << std::endl;
+    }
+
+    std::cout << "\n=== Test Grade Too Low to Execute ===" << std::endl;
+    try
+    {
+        Bureaucrat lowGrade("LowGrade", 150);
+        Bureaucrat highGrade("HighGrade", 1);
+        RobotomyRequestForm robot2("Target");
+        
+        highGrade.signForm(robot2);
+        lowGrade.executeForm(robot2);
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << "Exception: " << e.what() << std::endl;
+    }
+
+    return 0;
 }
