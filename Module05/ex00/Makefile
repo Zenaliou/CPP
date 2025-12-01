@@ -6,7 +6,7 @@ SRCS = 	main.cpp \
 OBJ_DIR = obj
 OBJS = $(SRCS:%.cpp=$(OBJ_DIR)/%.o)
 DEP = $(OBJS:.o=.d)
-NAME = ClapTrap
+NAME = Bureaucrat
 
 GREEN   = \033[1;32m
 RED     = \033[1;31m
