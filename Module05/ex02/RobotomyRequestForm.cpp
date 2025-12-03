@@ -36,6 +36,7 @@ std::string RobotomyRequestForm::getTarget(void) const
     return this->_target;
 }
 
+// Makes drilling noises, then 50% chance of success
 void RobotomyRequestForm::execute(Bureaucrat const &executor) const
 {
     if (!this->getIsSignedBool())
@@ -43,9 +44,12 @@ void RobotomyRequestForm::execute(Bureaucrat const &executor) const
     if ((int)executor.getGrade() > this->getExecGrade())
         throw AForm::GradeTooLowException();
 
+    // Drilling sound effect
     std::cout << "* DRILLING NOISES * Bzzzzz..." << std::endl;
-    srand(time(NULL));
-    if (rand() % 2)
+    
+    // 50% success rate using random number
+    srand(time(NULL));  // Seed with current time
+    if (rand() % 2)     // rand() % 2 gives 0 or 1
         std::cout << this->_target << " has been robotomized successfully!" << std::endl;
     else
         std::cout << "Robotomy failed on " << this->_target << "!" << std::endl;

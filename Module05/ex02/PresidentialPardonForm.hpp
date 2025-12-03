@@ -3,10 +3,12 @@
 
 #include "AForm.hpp"
 
+// Concrete form: grants presidential pardon
+// Required grades: sign=25, exec=5 (hardest form - needs top bureaucrats)
 class PresidentialPardonForm : public AForm
 {
     private:
-        std::string _target;
+        std::string _target;  // Who receives the pardon
 
     public:
         PresidentialPardonForm(void);
@@ -15,6 +17,7 @@ class PresidentialPardonForm : public AForm
         PresidentialPardonForm &operator=(const PresidentialPardonForm &other);
         virtual ~PresidentialPardonForm();
 
+        // Override: announces pardon by Zaphod Beeblebrox
         virtual void execute(Bureaucrat const &executor) const;
         std::string getTarget(void) const;
 };

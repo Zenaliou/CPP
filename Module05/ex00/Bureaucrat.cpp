@@ -60,23 +60,25 @@ size_t Bureaucrat::getGrade(void)const
 	return (this->_grade);
 }
 
+// Central validation: throws exceptions if grade is out of range [1-150]
 void Bureaucrat::setGrade(int grade)
 {
-	if (grade > 150)
-		throw Bureaucrat::GradeTooLowExceptions();
-	else if (grade < 1)
-		throw Bureaucrat::GradeTooHighExceptions();
-	else
-		this->_grade = grade;
+    if (grade > 150)
+        throw Bureaucrat::GradeTooLowExceptions();  // Grade 151+ is too low
+    else if (grade < 1)
+        throw Bureaucrat::GradeTooHighExceptions(); // Grade 0 or negative is too high
+    else
+        this->_grade = grade;
 }
 
+// Exception what() implementations - return C-string error messages
 const char *Bureaucrat::GradeTooHighExceptions::what(void) const throw()
 {
-	return ("Grade too high");
+    return ("Grade too high");
 }
 
 const char *Bureaucrat::GradeTooLowExceptions::what(void) const throw()
 {
-	return ("Grade too low");
+    return ("Grade too low");
 }
 

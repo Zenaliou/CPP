@@ -36,19 +36,24 @@ std::string ShrubberyCreationForm::getTarget(void) const
     return this->_target;
 }
 
+// Implementation of pure virtual execute()
+// Creates file <target>_shrubbery with ASCII trees
 void ShrubberyCreationForm::execute(Bureaucrat const &executor) const
 {
+    // Check prerequisites: must be signed AND executor grade sufficient
     if (!this->getIsSignedBool())
         throw AForm::FormNotSignedException();
     if ((int)executor.getGrade() > this->getExecGrade())
         throw AForm::GradeTooLowException();
 
+    // Create and write to file
     std::ofstream file((this->_target + "_shrubbery").c_str());
     if (!file.is_open())
     {
         std::cerr << "Error: could not open file" << std::endl;
         return;
     }
+    // ASCII art tree
     file << "       _-_" << std::endl;
     file << "    /~~   ~~\\" << std::endl;
     file << " /~~         ~~\\" << std::endl;
