@@ -36,6 +36,7 @@ std::string PresidentialPardonForm::getTarget(void) const
     return this->_target;
 }
 
+// Simplest execution: just prints pardon message
 void PresidentialPardonForm::execute(Bureaucrat const &executor) const
 {
     if (!this->getIsSignedBool())

@@ -11,103 +11,110 @@ Form::Form(const Form& other) : _name(other.getName() + "_copy"), _is_signed(fal
 	*this = other;
 }
 
+// Constructor with grades only, validates range [1-150]
 Form::Form(int sign_grade, int exec_grade) : _name("default"), _is_signed(false), _sign_grade(sign_grade), _exec_grade(exec_grade)
 {
-	std::cout << "Form Constructor called for " << this->getName() << "with sign-grade of " << sign_grade << " and execution-grade of " << exec_grade << std::endl;
-	const int i = this->getSignGrade();
-	const int j = this->getExecGrade();
-	if (i > 150 || j > 150)
-		throw(Form::GradeTooLowExceptions());
-	else if (i < 1 || j < 1)
-		throw(Form::GradeTooHighExceptions());
+    std::cout << "Form Constructor called for " << this->getName() << "with sign-grade of " << sign_grade << " and execution-grade of " << exec_grade << std::endl;
+    const int i = this->getSignGrade();
+    const int j = this->getExecGrade();
+    // Validate both grades are within valid range
+    if (i > 150 || j > 150)
+        throw(Form::GradeTooLowExceptions());
+    else if (i < 1 || j < 1)
+        throw(Form::GradeTooHighExceptions());
 }
 
 Form::Form(const std::string name) : _name(name), _is_signed(false), _sign_grade(150), _exec_grade(150)
 {
-	std::cout << "Form Constructor called for " << this->getName() << " with sign-grade of " << this ->getSignGrade() << " and execution-grade of " << this ->getExecGrade() << std::endl;
+    std::cout << "Form Constructor called for " << this->getName() << " with sign-grade of " << this ->getSignGrade() << " and execution-grade of " << this ->getExecGrade() << std::endl;
 }
 
 Form::Form(const std::string name, int sign_grade, int exec_grade) : _name(name), _is_signed(false), _sign_grade(sign_grade), _exec_grade(exec_grade)
 {
-	std::cout << "Form Constructor called for " << this->getName() << " with sign-grade of " << sign_grade << " and exec-grade of " << exec_grade << std::endl;
+    std::cout << "Form Constructor called for " << this->getName() << " with sign-grade of " << sign_grade << " and exec-grade of " << exec_grade << std::endl;
 
-	const int i = this->getSignGrade();
-	const int j = this->getExecGrade();
-	if (i > 150 | j > 150)
-		throw(Form::GradeTooLowExceptions());
-	else if (i < 1 | j < 1)
-		throw(Form::GradeTooHighExceptions());
+    const int i = this->getSignGrade();
+    const int j = this->getExecGrade();
+    // Should be: if (i > 150 || j > 150)
+    if (i > 150 | j > 150)
+        throw(Form::GradeTooLowExceptions());
+    else if (i < 1 | j < 1)
+        throw(Form::GradeTooHighExceptions());
 }
 
 Form &Form::operator=(const Form& other)
 {
-	std::cout << "Form Assignation operator called" << std::endl;
+    std::cout << "Form Assignation operator called" << std::endl;
 
-	if (this == &other)
-		return *this;
-	return *this;
+    if (this == &other)
+        return *this;
+    return *this;
 }
 
 Form::~Form()
 {
-	std::cout << "Form Destructor for " << this->getName() << " called" << std::endl;
+    std::cout << "Form Destructor for " << this->getName() << " called" << std::endl;
 }
 
+// Core signing logic: checks if bureaucrat's grade is sufficient
 void Form::beSigned(Bureaucrat &signer)
 {
-	if (((int)signer.getGrade() > this->getSignGrade()))
-		throw(Bureaucrat::GradeTooLowExceptions());
-	else if (this->getIsSigned() == "false")
-	{
-		this->_is_signed = true;
-		std::cout << this->getName() << " Form was signed by " << signer.getName() << std::endl;
-	}
-	else
-		std::cout << this->getName() << " Form is already signed" << std::endl;
+    // If bureaucrat's grade is numerically higher (worse) than required, reject
+    if (((int)signer.getGrade() > this->getSignGrade()))
+        throw(Bureaucrat::GradeTooLowExceptions());
+    // Only sign if not already signed
+    else if (this->getIsSigned() == "false")
+    {
+        this->_is_signed = true;
+        std::cout << this->getName() << " Form was signed by " << signer.getName() << std::endl;
+    }
+    else
+        std::cout << this->getName() << " Form is already signed" << std::endl;
 }
 
 const std::string Form::getName(void)const
 {
-	return (this->_name);
+    return (this->_name);
 }
 
 const std::string Form::getIsSigned(void)const
 {
-	if (this->_is_signed)
-		return ("true");
-	else
-		return ("false");
+    if (this->_is_signed)
+        return ("true");
+    else
+        return ("false");
 }
 
 bool Form::getIsSignedBool(void)const
 {
-	return (this->_is_signed);
+    return (this->_is_signed);
 }
 
 int Form::getSignGrade(void)const
 {
-	return (this->_sign_grade);
+    return (this->_sign_grade);
 }
 
 int Form::getExecGrade(void)const
 {
-	return (this->_exec_grade);
+    return (this->_exec_grade);
 }
 
 const char *Form::GradeTooLowExceptions::what(void) const throw()
 {
-	return ("Grade too low");
+    return ("Grade too low");
 }
 
 const char *Form::GradeTooHighExceptions::what(void) const throw()
 {
-	return ("Grade too high");
+    return ("Grade too high");
 }
 
+// Overloaded << operator: prints all form information
 std::ostream &operator<<(std::ostream &o, const Form &a)
 {
-	o << "Form " << a.getName() << " (signed: " << a.getIsSigned() 
-	  << ", sign grade: " << a.getSignGrade() 
-	  << ", exec grade: " << a.getExecGrade() << ")";
-	return o;
+    o << "Form " << a.getName() << " (signed: " << a.getIsSigned() 
+      << ", sign grade: " << a.getSignGrade() 
+      << ", exec grade: " << a.getExecGrade() << ")";
+    return o;
 }
