@@ -4,7 +4,6 @@
 #include <iostream>
 #include <string>
 
-// Définition des couleurs ANSI
 #define RESET   "\033[0m"
 #define GREEN   "\033[1;32m"
 #define BLUE    "\033[1;34m"
