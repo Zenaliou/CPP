@@ -16,6 +16,8 @@ class PmergeMe
 	private:
 		std::vector<int> _vector;
 		std::deque<int> _deque;
+		size_t _cmpVector;
+		size_t _cmpDeque;
 
 		// suite de jacobsthal
 		std::vector<size_t> generatorJacob(size_t n);
@@ -49,6 +51,8 @@ class PmergeMe
 		// Getters
 		const std::vector<int> &getVector() const;
 		const std::deque<int> &getDeque() const;
+		size_t getCmpVector() const;
+		size_t getCmpDeque() const;
 };
 
 #endif

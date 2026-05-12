@@ -32,6 +32,8 @@ int main(int ac, char **av)
 				  << " elements with std::vector : " << timeVec << " us" << std::endl;
 		std::cout << "Time to process a range of " << ac - 1
 				  << " elements with std::deque  : " << timeDeq << " us" << std::endl;
+		std::cout << "Comparisons with std::vector : " << pm.getCmpVector() << std::endl;
+		std::cout << "Comparisons with std::deque  : " << pm.getCmpDeque() << std::endl;
 	}
 	catch (std::exception &e)
 	{
