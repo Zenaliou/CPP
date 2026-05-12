@@ -11,7 +11,7 @@ PmergeMe::PmergeMe(int ac, char **av): _vector(), _deque() {
 		if (perse.empty()) {
 			throw std::invalid_argument("");
 		}
-		for (int j=0; j<perse.size(); j++) {
+		for (size_t j = 0; j < perse.size(); j++) {
 			if (!std::isdigit(perse[j])) {
 				throw std::invalid_argument("");
 			}
@@ -173,15 +173,7 @@ void PmergeMe::fordJohnsonSortVector(std::vector<int> &vec)
 	// Inserer les elements de pend dans l'ordre de Jacobsthal
 	if (!pend.empty())
 	{
-		// Suite de Jacobsthal pour l'insertion : 1, 3, 5, 11, 21
-		std::vector<size_t> jacob;
-		jacob.push_back(1);
-		jacob.push_back(3);
-		while (jacob.back() < pend.size())
-		{
-			size_t n = jacob.size();
-			jacob.push_back(jacob[n - 1] + 2 * jacob[n - 2]);
-		}
+		std::vector<size_t> jacob = generatorJacob(pend.size());
 
 		std::vector<bool> inserted(pend.size(), false);
 		size_t prevJacob = 0;
@@ -231,9 +223,110 @@ void PmergeMe::fordJohnsonSortVector(std::vector<int> &vec)
 	vec = mainChain;
 }
 
-void PmergeMe::mergePairsVector(std::vector<std::pair<int, int> > &pairs)
+void PmergeMe::mergePairsDeque(std::deque<std::pair<int, int> > &pairs)
 {
+	if (pairs.size() <= 1)
+		return;
 
+	std::deque<int> larges;
+	for (size_t i = 0; i < pairs.size(); i++)
+		larges.push_back(pairs[i].first);
+
+	fordJohnsonSortDeque(larges);
+
+	std::deque<std::pair<int, int> > sorted;
+	std::deque<bool> used(pairs.size(), false);
+	for (size_t i = 0; i < larges.size(); i++)
+	{
+		for (size_t j = 0; j < pairs.size(); j++)
+		{
+			if (!used[j] && pairs[j].first == larges[i])
+			{
+				sorted.push_back(pairs[j]);
+				used[j] = true;
+				break;
+			}
+		}
+	}
+	pairs = sorted;
+}
+
+void PmergeMe::fordJohnsonSortDeque(std::deque<int> &deq)
+{
+	if (deq.size() <= 1)
+		return;
+
+	bool hasStraggler = (deq.size() % 2 != 0);
+	int straggler = hasStraggler ? deq.back() : 0;
+
+	std::deque<std::pair<int, int> > pairs;
+	size_t limit = deq.size() - (hasStraggler ? 1 : 0);
+	for (size_t i = 0; i < limit; i += 2)
+	{
+		if (deq[i] >= deq[i + 1])
+			pairs.push_back(std::make_pair(deq[i], deq[i + 1]));
+		else
+			pairs.push_back(std::make_pair(deq[i + 1], deq[i]));
+	}
+
+	mergePairsDeque(pairs);
+
+	std::deque<int> mainChain;
+	mainChain.push_back(pairs[0].second);
+	for (size_t i = 0; i < pairs.size(); i++)
+		mainChain.push_back(pairs[i].first);
+
+	std::deque<int> pend;
+	for (size_t i = 1; i < pairs.size(); i++)
+		pend.push_back(pairs[i].second);
+
+	if (!pend.empty())
+	{
+		std::vector<size_t> jacob = generatorJacob(pend.size());
+
+		std::deque<bool> inserted(pend.size(), false);
+		size_t prevJacob = 0;
+
+		for (size_t k = 0; k < jacob.size(); k++)
+		{
+			size_t curr = (jacob[k] < pend.size()) ? jacob[k] : pend.size();
+
+			for (size_t idx = curr; idx > prevJacob; idx--)
+			{
+				size_t realIdx = idx - 1;
+				if (!inserted[realIdx])
+				{
+					int pairedLarge = pairs[realIdx + 1].first;
+					size_t bound = binarySearchDeque(mainChain, pairedLarge, mainChain.size());
+					size_t pos = binarySearchDeque(mainChain, pend[realIdx], bound);
+					mainChain.insert(mainChain.begin() + pos, pend[realIdx]);
+					inserted[realIdx] = true;
+				}
+			}
+			prevJacob = jacob[k];
+			if (prevJacob >= pend.size())
+				break;
+		}
+
+		for (size_t i = 0; i < pend.size(); i++)
+		{
+			if (!inserted[i])
+			{
+				int pairedLarge = pairs[i + 1].first;
+				size_t bound = binarySearchDeque(mainChain, pairedLarge, mainChain.size());
+				size_t pos = binarySearchDeque(mainChain, pend[i], bound);
+				mainChain.insert(mainChain.begin() + pos, pend[i]);
+			}
+		}
+	}
+
+	if (hasStraggler)
+	{
+		size_t pos = binarySearchDeque(mainChain, straggler, mainChain.size());
+		mainChain.insert(mainChain.begin() + pos, straggler);
+	}
+
+	deq = mainChain;
 }
 
 void PmergeMe::displayBefore() const
@@ -260,6 +353,15 @@ void PmergeMe::displayAfter() const
 	std::cout << std::endl;
 }
 
+void PmergeMe::sortVector()
+{
+	fordJohnsonSortVector(_vector);
+}
+
+void PmergeMe::sortDeque()
+{
+	fordJohnsonSortDeque(_deque);
+}
+
 const std::vector<int> &PmergeMe::getVector() const { return _vector; }
 const std::deque<int> &PmergeMe::getDeque() const { return _deque; }
-

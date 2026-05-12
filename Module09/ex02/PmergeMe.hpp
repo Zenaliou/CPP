@@ -39,8 +39,8 @@ class PmergeMe
 		PmergeMe &operator=(const PmergeMe &other);
 		~PmergeMe();
 
-		// Tri principal
-		void sort();
+		void sortVector();
+		void sortDeque();
 
 		// Affichage
 		void displayBefore() const;
